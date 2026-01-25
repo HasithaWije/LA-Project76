@@ -27,6 +27,31 @@ public class ItemDAOImpl {
         }
         return items;
     }
+    // ------------------------------------------------ For OrderController -----------------------------------------------
+
+    public ItemDTO getItem(String newItemCode) throws SQLException, ClassNotFoundException {
+        Connection connection = DBConnection.getDbConnection().getConnection();
+        PreparedStatement pstm = connection.prepareStatement("SELECT * FROM Item WHERE code=?");
+        pstm.setString(1, newItemCode + "");
+        ResultSet rst = pstm.executeQuery();
+        rst.next();
+        ItemDTO item = new ItemDTO(newItemCode + "", rst.getString("description"), rst.getBigDecimal("unitPrice"), rst.getInt("qtyOnHand"));
+        return item;
+    }
+
+    public ArrayList<String> loadAllItemCodes() throws SQLException, ClassNotFoundException {
+        Connection connection = DBConnection.getDbConnection().getConnection();
+        Statement stm = connection.createStatement();
+        ResultSet rst = stm.executeQuery("SELECT * FROM Item");
+
+        ArrayList<String> itemCodes = new ArrayList<>();
+        while (rst.next()) {
+            itemCodes.add(rst.getString("code"));
+        }
+        return itemCodes;
+    }
+
+    // ---------------------------------------------------------------------------------------------------------------------
 
     public void deleteItem( String code) throws SQLException, ClassNotFoundException {
         Connection connection = DBConnection.getDbConnection().getConnection();

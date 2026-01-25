@@ -1,6 +1,7 @@
 package com.example.layeredarchitecture.dao;
 
 import com.example.layeredarchitecture.db.DBConnection;
+import com.example.layeredarchitecture.model.CustomerDTO;
 import com.example.layeredarchitecture.view.tdm.CustomerTM;
 
 import java.sql.*;
@@ -24,6 +25,33 @@ public class CustomerDAOImpl {
 
         return customers;
     }
+
+    // ------------------------------------------------ For OrderController -----------------------------------------------
+
+    public CustomerDTO getCustomer(String id) throws SQLException, ClassNotFoundException {
+        Connection connection = DBConnection.getDbConnection().getConnection();
+        PreparedStatement pstm = connection.prepareStatement("SELECT * FROM Customer WHERE id=?");
+        pstm.setString(1, id + "");
+        ResultSet rst = pstm.executeQuery();
+        rst.next();
+        CustomerDTO customerDTO = new CustomerDTO(id + "", rst.getString("name"), rst.getString("address"));
+        return customerDTO;
+    }
+
+    public ArrayList<String> loadAllCustomerIds() throws SQLException, ClassNotFoundException {
+        Connection connection = DBConnection.getDbConnection().getConnection();
+        Statement stm = connection.createStatement();
+        ResultSet rst = stm.executeQuery("SELECT * FROM Customer");
+
+        ArrayList<String> customerId = new ArrayList<>();
+
+        while (rst.next()) {
+            customerId.add(rst.getString("id"));
+        }
+        return customerId;
+    }
+
+    // ---------------------------------------------------------------------------------------------------------------------
 
     public void saveCustomer(String id, String name, String address) throws SQLException, ClassNotFoundException {
         Connection connection = DBConnection.getDbConnection().getConnection();
