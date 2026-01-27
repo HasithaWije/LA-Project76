@@ -2,6 +2,7 @@ package com.example.layeredarchitecture.controller;
 
 import com.example.layeredarchitecture.dao.CustomerDAOImpl;
 import com.example.layeredarchitecture.db.DBConnection;
+import com.example.layeredarchitecture.model.CustomerDTO;
 import com.example.layeredarchitecture.view.tdm.CustomerTM;
 import com.jfoenix.controls.JFXButton;
 import javafx.application.Platform;
@@ -71,8 +72,8 @@ public class ManageCustomersFormController {
 
 
             CustomerDAOImpl customerDAO = new CustomerDAOImpl();
-            ArrayList<CustomerTM> customers = customerDAO.getAllCustomers();
-            for (CustomerTM customer : customers) {
+            ArrayList<CustomerDTO> customers = customerDAO.getAllCustomers();
+            for (CustomerDTO customer : customers) {
                 tblCustomers.getItems().add(new CustomerTM(
                         customer.getId(),
                         customer.getName(),

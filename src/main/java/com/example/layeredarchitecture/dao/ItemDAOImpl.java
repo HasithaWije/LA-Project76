@@ -39,18 +39,6 @@ public class ItemDAOImpl {
         return item;
     }
 
-    public ArrayList<String> loadAllItemCodes() throws SQLException, ClassNotFoundException {
-        Connection connection = DBConnection.getDbConnection().getConnection();
-        Statement stm = connection.createStatement();
-        ResultSet rst = stm.executeQuery("SELECT * FROM Item");
-
-        ArrayList<String> itemCodes = new ArrayList<>();
-        while (rst.next()) {
-            itemCodes.add(rst.getString("code"));
-        }
-        return itemCodes;
-    }
-
     // ---------------------------------------------------------------------------------------------------------------------
 
     public void deleteItem( String code) throws SQLException, ClassNotFoundException {
@@ -70,14 +58,14 @@ public class ItemDAOImpl {
         pstm.executeUpdate();
     }
 
-    public void updateItem(String code, String description, BigDecimal unitPrice, int qtyOnHand) throws SQLException, ClassNotFoundException {
+    public boolean updateItem(String code, String description, BigDecimal unitPrice, int qtyOnHand) throws SQLException, ClassNotFoundException {
         Connection connection = DBConnection.getDbConnection().getConnection();
         PreparedStatement pstm = connection.prepareStatement("UPDATE Item SET description=?, unitPrice=?, qtyOnHand=? WHERE code=?");
         pstm.setString(1, description);
         pstm.setBigDecimal(2, unitPrice);
         pstm.setInt(3, qtyOnHand);
         pstm.setString(4, code);
-        pstm.executeUpdate();
+        return pstm.executeUpdate() > 0;
     }
 
     public boolean existItem(String code) throws SQLException, ClassNotFoundException {

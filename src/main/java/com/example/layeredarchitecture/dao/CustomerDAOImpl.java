@@ -9,18 +9,18 @@ import java.util.ArrayList;
 
 public class CustomerDAOImpl {
 
-    public ArrayList<CustomerTM> getAllCustomers() throws SQLException, ClassNotFoundException {
+    public ArrayList<CustomerDTO> getAllCustomers() throws SQLException, ClassNotFoundException {
 
         Connection connection = DBConnection.getDbConnection().getConnection();
         Statement stm = connection.createStatement();
         ResultSet rst = stm.executeQuery("SELECT * FROM Customer");
 
-        ArrayList<CustomerTM> customers = new ArrayList<CustomerTM>();
+        ArrayList<CustomerDTO> customers = new ArrayList<CustomerDTO>();
         while (rst.next()) {
             String id = rst.getString("id");
             String name = rst.getString("name");
             String address = rst.getString("address");
-            customers.add(new CustomerTM(id, name, address));
+            customers.add(new CustomerDTO(id, name, address));
         }
 
         return customers;
@@ -36,19 +36,6 @@ public class CustomerDAOImpl {
         rst.next();
         CustomerDTO customerDTO = new CustomerDTO(id + "", rst.getString("name"), rst.getString("address"));
         return customerDTO;
-    }
-
-    public ArrayList<String> loadAllCustomerIds() throws SQLException, ClassNotFoundException {
-        Connection connection = DBConnection.getDbConnection().getConnection();
-        Statement stm = connection.createStatement();
-        ResultSet rst = stm.executeQuery("SELECT * FROM Customer");
-
-        ArrayList<String> customerId = new ArrayList<>();
-
-        while (rst.next()) {
-            customerId.add(rst.getString("id"));
-        }
-        return customerId;
     }
 
     // ---------------------------------------------------------------------------------------------------------------------
