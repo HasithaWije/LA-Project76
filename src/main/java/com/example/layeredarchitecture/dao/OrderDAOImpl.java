@@ -1,39 +1,37 @@
 package com.example.layeredarchitecture.dao;
 
+import com.example.layeredarchitecture.dao.custom.OrderDAO;
 import com.example.layeredarchitecture.db.DBConnection;
-import com.example.layeredarchitecture.model.CustomerDTO;
-import com.example.layeredarchitecture.model.ItemDTO;
-import com.example.layeredarchitecture.model.OrderDetailDTO;
-import javafx.scene.control.Alert;
 
 import java.sql.*;
 import java.time.LocalDate;
-import java.util.List;
 
-public class OrderDAOImpl {
+public class OrderDAOImpl implements OrderDAO {
 
+    @Override
     public String generateNewOrderId() throws SQLException, ClassNotFoundException {
 
-        Connection connection = DBConnection.getDbConnection().getConnection();
-        Statement stm = connection.createStatement();
-        ResultSet rst = stm.executeQuery("SELECT oid FROM `Orders` ORDER BY oid DESC LIMIT 1;");
+        String sql = "SELECT oid FROM `Orders` ORDER BY oid DESC LIMIT 1;";
+        ResultSet rst = CrudUtil.execute(sql);
 
         return rst.next() ? String.format("OID-%03d", (Integer.parseInt(rst.getString("oid").replace("OID-", "")) + 1)) : "OID-001";
     }
 
+    @Override
     public boolean exitsOrder(String orderId) throws SQLException, ClassNotFoundException {
-        Connection connection = DBConnection.getDbConnection().getConnection();
-        PreparedStatement stm = connection.prepareStatement("SELECT oid FROM `Orders` WHERE oid=?");
-        stm.setString(1,orderId);
-        return  stm.executeQuery().next();
+
+        String sql = "SELECT oid FROM `Orders` WHERE oid=?";
+        ResultSet rst = CrudUtil.execute(sql, orderId);
+        return rst.next();
+
     }
 
+    @Override
     public boolean saveOrder(String orderId, LocalDate orderDate, String customerId) throws SQLException, ClassNotFoundException {
-        Connection connection = DBConnection.getDbConnection().getConnection();
-        PreparedStatement stm = connection.prepareStatement("INSERT INTO `Orders` (oid, date, customerID) VALUES (?,?,?)");
-        stm.setString(1, orderId);
-        stm.setDate(2, Date.valueOf(orderDate));
-        stm.setString(3, customerId);
-        return stm.executeUpdate() > 0;
+
+        String sql = "INSERT INTO `Orders` (oid, date, customerID) VALUES (?,?,?)";
+        return CrudUtil.execute(sql, orderId, Date.valueOf(orderDate), customerId);
+
+
     }
 }
