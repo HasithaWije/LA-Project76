@@ -1,5 +1,6 @@
 package com.example.layeredarchitecture.dao;
 
+import com.example.layeredarchitecture.dao.custom.CommonDAO;
 import com.example.layeredarchitecture.dao.custom.CustomerDAO;
 import com.example.layeredarchitecture.db.DBConnection;
 import com.example.layeredarchitecture.model.CustomerDTO;
@@ -40,17 +41,17 @@ public class CustomerDAOImpl implements CustomerDAO {
     // ---------------------------------------------------------------------------------------------------------------------
 
     @Override
-    public void saveCustomer(String id, String name, String address) throws SQLException, ClassNotFoundException {
+    public boolean saveCustomer(CustomerDTO customerDTO) throws SQLException, ClassNotFoundException {
 
         String sql = "INSERT INTO Customer (id,name, address) VALUES (?,?,?)";
-        boolean isExecute = CrudUtil.execute(sql, id, name, address);
+        return  CrudUtil.execute(sql, customerDTO.getId(), customerDTO.getName(), customerDTO.getAddress());
     }
 
     @Override
-    public void updateCustomer(String id, String name, String address) throws SQLException, ClassNotFoundException {
+    public boolean updateCustomer(CustomerDTO customerDTO) throws SQLException, ClassNotFoundException {
 
         String sql = "UPDATE Customer SET name=?, address=? WHERE id=?";
-        boolean isExecute = CrudUtil.execute(sql, name, address, id);
+        return CrudUtil.execute(sql, customerDTO.getName(), customerDTO.getAddress(), customerDTO.getId());
     }
 
     @Override
@@ -62,10 +63,10 @@ public class CustomerDAOImpl implements CustomerDAO {
     }
 
     @Override
-    public void deleteCustomer(String id) throws SQLException, ClassNotFoundException {
+    public boolean deleteCustomer(String id) throws SQLException, ClassNotFoundException {
 
         String sql = "DELETE FROM Customer WHERE id=?";
-        boolean isExecute = CrudUtil.execute(sql, id);
+        return CrudUtil.execute(sql, id);
     }
 
     @Override

@@ -197,7 +197,7 @@ public class ManageItemsFormController {
 //                pstm.executeUpdate();
 
 //                ItemDAO itemDAO = new ItemDAOImpl();
-                itemDAO.addItem(code, description, unitPrice, qtyOnHand);
+                itemDAO.addItem(new ItemDTO(code, description, unitPrice, qtyOnHand));
 
                 tblItems.getItems().add(new ItemTM(code, description, unitPrice, qtyOnHand));
 
@@ -222,7 +222,7 @@ public class ManageItemsFormController {
 //                pstm.executeUpdate();
 
 //                ItemDAO itemDAO = new ItemDAOImpl();
-                itemDAO.updateItem(code, description, unitPrice, qtyOnHand);
+                itemDAO.updateItem(new ItemDTO(code, description, unitPrice, qtyOnHand));
 
                 ItemTM selectedItem = tblItems.getSelectionModel().getSelectedItem();
                 selectedItem.setDescription(description);

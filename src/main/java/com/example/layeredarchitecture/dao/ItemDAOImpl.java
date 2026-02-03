@@ -43,24 +43,26 @@ public class ItemDAOImpl implements ItemDAO {
     // ---------------------------------------------------------------------------------------------------------------------
 
     @Override
-    public void deleteItem( String code) throws SQLException, ClassNotFoundException {
+    public boolean deleteItem( String code) throws SQLException, ClassNotFoundException {
 
         String sql = "DELETE FROM Item WHERE code=?";
-        boolean isExecute = CrudUtil.execute(sql,code);
+        return CrudUtil.execute(sql,code);
     }
 
     @Override
-    public void addItem(String code, String description, BigDecimal unitPrice, int qtyOnHand) throws SQLException, ClassNotFoundException {
+    public boolean addItem(ItemDTO itemDTO) throws SQLException, ClassNotFoundException {
 
         String sql = "INSERT INTO Item (code, description, unitPrice, qtyOnHand) VALUES (?,?,?,?)";
-        boolean isExecute = CrudUtil.execute(sql,code, description, unitPrice, qtyOnHand);
+        return CrudUtil.execute(sql, itemDTO.getCode(), itemDTO.getDescription(),
+                itemDTO.getUnitPrice(), itemDTO.getQtyOnHand());
     }
 
     @Override
-    public boolean updateItem(String code, String description, BigDecimal unitPrice, int qtyOnHand) throws SQLException, ClassNotFoundException {
+    public boolean updateItem(ItemDTO itemDTO) throws SQLException, ClassNotFoundException {
 
         String sql = "UPDATE Item SET description=?, unitPrice=?, qtyOnHand=? WHERE code=?";
-        return CrudUtil.execute(sql, description, unitPrice, qtyOnHand, code);
+        return CrudUtil.execute(sql, itemDTO.getDescription(), itemDTO.getUnitPrice(),
+                itemDTO.getQtyOnHand(), itemDTO.getCode());
     }
 
     @Override
