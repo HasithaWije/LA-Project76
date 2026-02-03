@@ -1,7 +1,7 @@
-package com.example.layeredarchitecture.dao;
+package com.example.layeredarchitecture.dao.custom.impl;
 
+import com.example.layeredarchitecture.dao.CrudUtil;
 import com.example.layeredarchitecture.dao.custom.ItemDAO;
-import com.example.layeredarchitecture.db.DBConnection;
 import com.example.layeredarchitecture.model.ItemDTO;
 
 import java.math.BigDecimal;
@@ -11,7 +11,7 @@ import java.util.ArrayList;
 public class ItemDAOImpl implements ItemDAO {
 
     @Override
-    public ArrayList<ItemDTO> loadAllItems() throws SQLException, ClassNotFoundException {
+    public ArrayList<ItemDTO> getAll() throws SQLException, ClassNotFoundException {
 
         String sql = "SELECT * FROM Item";
         ResultSet rst = CrudUtil.execute(sql);
@@ -31,7 +31,7 @@ public class ItemDAOImpl implements ItemDAO {
     // ------------------------------------------------ For OrderController -----------------------------------------------
 
     @Override
-    public ItemDTO getItem(String newItemCode) throws SQLException, ClassNotFoundException {
+    public ItemDTO get(String newItemCode) throws SQLException, ClassNotFoundException {
 
         String sql = "SELECT * FROM Item WHERE code=?";
         ResultSet rst = CrudUtil.execute(sql,newItemCode);
@@ -43,14 +43,14 @@ public class ItemDAOImpl implements ItemDAO {
     // ---------------------------------------------------------------------------------------------------------------------
 
     @Override
-    public boolean deleteItem( String code) throws SQLException, ClassNotFoundException {
+    public boolean delete( String code) throws SQLException, ClassNotFoundException {
 
         String sql = "DELETE FROM Item WHERE code=?";
         return CrudUtil.execute(sql,code);
     }
 
     @Override
-    public boolean addItem(ItemDTO itemDTO) throws SQLException, ClassNotFoundException {
+    public boolean save(ItemDTO itemDTO) throws SQLException, ClassNotFoundException {
 
         String sql = "INSERT INTO Item (code, description, unitPrice, qtyOnHand) VALUES (?,?,?,?)";
         return CrudUtil.execute(sql, itemDTO.getCode(), itemDTO.getDescription(),
@@ -58,7 +58,7 @@ public class ItemDAOImpl implements ItemDAO {
     }
 
     @Override
-    public boolean updateItem(ItemDTO itemDTO) throws SQLException, ClassNotFoundException {
+    public boolean update(ItemDTO itemDTO) throws SQLException, ClassNotFoundException {
 
         String sql = "UPDATE Item SET description=?, unitPrice=?, qtyOnHand=? WHERE code=?";
         return CrudUtil.execute(sql, itemDTO.getDescription(), itemDTO.getUnitPrice(),
@@ -66,7 +66,7 @@ public class ItemDAOImpl implements ItemDAO {
     }
 
     @Override
-    public boolean existItem(String code) throws SQLException, ClassNotFoundException {
+    public boolean exist(String code) throws SQLException, ClassNotFoundException {
 
         String sql = "SELECT code FROM Item WHERE code=?";
         ResultSet rst = CrudUtil.execute(sql,code);
@@ -74,7 +74,7 @@ public class ItemDAOImpl implements ItemDAO {
     }
 
     @Override
-    public String generateNewId() throws SQLException, ClassNotFoundException {
+    public String generateId() throws SQLException, ClassNotFoundException {
 
         String sql = "SELECT code FROM Item ORDER BY code DESC LIMIT 1";
         ResultSet rst = CrudUtil.execute(sql);
